@@ -1,6 +1,6 @@
 # twerp
 
-## An easy way to get started working with Twitter's streaming API.
+## An easy way to get started working with Twitter's streaming API
 
 After cloning this repo, creating a developer account with Twitter, and setting up a Mongodb, you are ready to stream!
 
