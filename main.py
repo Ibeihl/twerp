@@ -5,18 +5,12 @@ import json
 import datetime
 import pymongo
 from pymongo import MongoClient
-from monkeylearn import MonkeyLearn 
+from monkeylearn import MonkeyLearn
+from keys import ckey, csecret, atoken, asecret, monkeyKey
 
 client = MongoClient()
 db = client.tweep
 tweeps = db.tweeps
-
-ckey = 'R1NLvEVigMgPLLAIekyCLIgAb'
-csecret = '2IZk2cCRdKkv7I9pblgC2Lsw27yPdy1bJX9ortc9ZxI9b14QGU'
-atoken = '1042129605132513280-L49n9kVpXF9ZJ9O9zzQW2LyPfT6Ftm'
-asecret = 'EeWghpx984DuGu2DAR63fJL1HdvaAISsEXwuGNqycoBrq'
-monkeyKey = 'ee527bcb1d60515317560bb8090e8264e004fe48'
-
 
 def sentimentalizer(text):
     ml = MonkeyLearn(monkeyKey)
