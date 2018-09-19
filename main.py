@@ -2,7 +2,7 @@ from tweepy import Stream
 from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
 import json
-import datetime
+import time
 import pymongo
 from pymongo import MongoClient
 from monkeylearn import MonkeyLearn
@@ -12,6 +12,7 @@ client = MongoClient()
 db = client.tweep
 tweeps = db.tweeps
 
+# worked well but hit query limit super fast
 def sentimentalizer(text):
     ml = MonkeyLearn(monkeyKey)
     data = [text]
@@ -31,14 +32,15 @@ class listener(StreamListener):
 
     def on_data(self, data):
         all_data = json.loads(data)
-        tweet = all_data["text"]
+        tweet = str(time.ctime(int(time.time()))) + '::' + all_data["text"] 
         # print(type(tweet.encode('ascii', 'ignore')))
         insertMe = tweet.encode('ascii', 'ignore')
 
         print(tweet)
-        sentiment = sentimentalizer(tweet)
-        tweeps.insert_one({'tweet': insertMe, 'sentiment': sentiment})
-        print(sentiment['rating'])
+        # sentiment = sentimentalizer(tweet)
+        # tweeps.insert_one({'tweet': insertMe, 'sentiment': sentiment})
+        tweeps.insert_one({'tweet': tweet})
+        # print(sentiment['rating'])
         return True
     
     def on_error(self, status):
@@ -50,4 +52,5 @@ auth.set_access_token(atoken, asecret)
 twitterStream = Stream(auth, listener())
 #twitterStream.filter(track=["chicago"])
 #twitterStream.filter(locations=[-124.625,41.875,-116.375,46.375]) 
-twitterStream.filter(follow=["25073877"])
+twitterStream.filter(follow=["25073877"], languages=["en"])
+
