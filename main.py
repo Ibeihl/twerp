@@ -51,6 +51,7 @@ auth.set_access_token(atoken, asecret)
 
 twitterStream = Stream(auth, listener())
 #twitterStream.filter(track=["chicago"])
-#twitterStream.filter(locations=[-124.625,41.875,-116.375,46.375]) 
-twitterStream.filter(follow=["25073877"], languages=["en"])
-
+# twitterStream.filter(locations=[-124.625,41.875,-116.375,46.375], languages=["en"]) 
+# twitterStream.filter(follow=["25073877"], languages=["en"])
+# twitterStream.filter(follow=["32010840"], locations=[-124.625,41.875,-116.375,46.375], languages=["en"])
+twitterStream.filter(follow=["32010840"])
