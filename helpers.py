@@ -1,5 +1,6 @@
 import pymongo
 from pymongo import MongoClient
+import time
 
 def score_keeper(contestant1, contestant2):
     client = MongoClient()
@@ -21,5 +22,15 @@ def clear_score():
     client = MongoClient()
     db = client.tweep
     twitter_race = db.tweeps
-
     twitter_race.drop()
+
+def start_message():
+    print("\n\nLET THE TWITTER BATTLE BEGIN...")
+    time.sleep(1)
+    print("3...")
+    time.sleep(1)
+    print("2...")
+    time.sleep(1)
+    print("1....")
+    time.sleep(1)
+    print("GO!!!\n\n")

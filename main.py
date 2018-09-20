@@ -6,7 +6,7 @@ import time
 import pymongo
 from pymongo import MongoClient
 from keys import ckey, csecret, atoken, asecret
-from queries import score_keeper, clear_score
+from helpers import score_keeper, clear_score, start_message
 
 #sets up mongodb with a db named tweep and collection named tweeps
 client = MongoClient()
@@ -17,15 +17,19 @@ twitter_race = db.tweeps
 
 class listener(StreamListener):
     # here we enter our 2 contestants as strings
-    contestant1 = "demo"
-    contestant2 = "the"
+    # replace demo and the with your contestants!!
+    contestant1 = "Trump"
+    contestant2 = "Obama"
 
     def on_data(self, data):
         #get tweet data
         all_data = json.loads(data)
 
         #extract tweet text and add timestamp
-        tweet = str(time.ctime(int(time.time()))) + '::' + all_data["text"]
+        if "text" in all_data:
+            tweet = str(time.ctime(int(time.time()))) + '::' + all_data["text"]
+        else:
+            tweet = str(time.ctime(int(time.time()))) + '::'
 
         #insert our formatted tweet into our mongodb 
         twitter_race.insert_one({'tweet': tweet})
@@ -36,6 +40,7 @@ class listener(StreamListener):
         return True
     
     def on_error(self, status):
+        print("something went wrong.... :(")
         print(status)
 
 # here we tie everything together...
@@ -44,12 +49,13 @@ def run_twitter_race(ckey, csecret, atoken, asecret):
     auth = OAuthHandler(ckey, csecret)
     auth.set_access_token(atoken, asecret)
 
+    start_message()
+
     #set up the twitter stream
     twitterStream = Stream(auth, listener())
 
     #add geobox location
-    twitterStream.filter(follow=["25073877"])
-
+    twitterStream.filter(languages=["en"], locations=[-126,24,67,49])
 
 run_twitter_race(ckey, csecret, atoken, asecret)
 
@@ -58,9 +64,4 @@ run_twitter_race(ckey, csecret, atoken, asecret)
 
 # clear_score()
 
-
-# twitterStream = Stream(auth, listener())
 # twitterStream.filter(locations=[-124.625,41.875,-116.375,46.375], languages=["en"]) 
-# twitterStream.filter(follow=["25073877"], languages=["en"])
-# twitterStream.filter(follow=["32010840"], locations=[-124.625,41.875,-116.375,46.375], languages=["en"])
-# twitterStream.filter(follow=["32010840"])
