@@ -6,7 +6,7 @@ import time
 import pymongo
 from pymongo import MongoClient
 from keys import ckey, csecret, atoken, asecret
-from queries import score_keeper
+from queries import score_keeper, clear_score
 
 #sets up mongodb with a db named tweep and collection named tweeps
 client = MongoClient()
@@ -39,7 +39,7 @@ class listener(StreamListener):
         print(status)
 
 # here we tie everything together...
-def all_in_one(ckey, csecret, atoken, asecret):
+def run_twitter_race(ckey, csecret, atoken, asecret):
     #auth info set up
     auth = OAuthHandler(ckey, csecret)
     auth.set_access_token(atoken, asecret)
@@ -51,7 +51,12 @@ def all_in_one(ckey, csecret, atoken, asecret):
     twitterStream.filter(follow=["25073877"])
 
 
-all_in_one(ckey, csecret, atoken, asecret)
+run_twitter_race(ckey, csecret, atoken, asecret)
+
+# to restart the game, comment out the run_twitter_race, uncomment
+# the clear_score function, and run this code!!
+
+# clear_score()
 
 
 # twitterStream = Stream(auth, listener())
