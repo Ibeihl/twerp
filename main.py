@@ -5,50 +5,41 @@ import json
 import time
 import pymongo
 from pymongo import MongoClient
-from keys import ckey, csecret, atoken, asecret, monkeyKey
+from keys import ckey, csecret, atoken, asecret
 from queries import score_keeper
 
-#sets up mongo with collection of tweets
+#sets up mongodb with a db named tweep and collection named tweeps
 client = MongoClient()
 db = client.tweep
 twitter_race = db.tweeps
 
-#this opens the live stream and stores the tweets in a mongodb
+# this is uses Twitter's StreamListener class ands some custom methods to it.
+
 class listener(StreamListener):
+    # here we enter our 2 contestants as strings
     contestant1 = "demo"
     contestant2 = "the"
-    def on_data(self, data):
-        # self.contestant1 = contestant1
-        # self.contestant2 = contestant2
-        all_data = json.loads(data)
-        tweet = str(time.ctime(int(time.time()))) + '::' + all_data["text"] 
-        # insertMe = tweet.encode('ascii', 'ignore')
 
+    def on_data(self, data):
+        #get tweet data
+        all_data = json.loads(data)
+
+        #extract tweet text and add timestamp
+        tweet = str(time.ctime(int(time.time()))) + '::' + all_data["text"]
+
+        #insert our formatted tweet into our mongodb 
         twitter_race.insert_one({'tweet': tweet})
-        print(tweet + "\n\n")
-        print(self.contestant1)
-        print(self.contestant2)
+
+        # run our contestants through our query function
         score_keeper(self.contestant1, self.contestant2)
+        print(tweet + "\n\n")
         return True
     
     def on_error(self, status):
         print(status)
 
-# auth = OAuthHandler(ckey, csecret)
-# auth.set_access_token(atoken, asecret)
-
-# twitterStream = Stream(auth, listener())
-# twitterStream.filter(locations=[-124.625,41.875,-116.375,46.375], languages=["en"]) 
-# twitterStream.filter(follow=["25073877"], languages=["en"])
-# twitterStream.filter(follow=["32010840"], locations=[-124.625,41.875,-116.375,46.375], languages=["en"])
-# twitterStream.filter(follow=["32010840"])
-
+# here we tie everything together...
 def all_in_one(ckey, csecret, atoken, asecret):
-    #set up mongodb
-    client = MongoClient()
-    db = client.tweep
-    twitter_race = db.tweeps
-
     #auth info set up
     auth = OAuthHandler(ckey, csecret)
     auth.set_access_token(atoken, asecret)
@@ -56,14 +47,15 @@ def all_in_one(ckey, csecret, atoken, asecret):
     #set up the twitter stream
     twitterStream = Stream(auth, listener())
 
-    #add contestant attribute
-    # twitterStream.contestant1 = contestant1
-    # twitterStream.contestant2 = contestant2
-
     #add geobox location
     twitterStream.filter(follow=["25073877"])
 
 
-
-
 all_in_one(ckey, csecret, atoken, asecret)
+
+
+# twitterStream = Stream(auth, listener())
+# twitterStream.filter(locations=[-124.625,41.875,-116.375,46.375], languages=["en"]) 
+# twitterStream.filter(follow=["25073877"], languages=["en"])
+# twitterStream.filter(follow=["32010840"], locations=[-124.625,41.875,-116.375,46.375], languages=["en"])
+# twitterStream.filter(follow=["32010840"])
