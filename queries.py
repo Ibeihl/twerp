@@ -1,14 +1,20 @@
 import pymongo
 from pymongo import MongoClient
 
-client = MongoClient()
-db = client.tweep
-tweeps = db.tweeps
+def score_keeper(contestant1, contestant2):
+    client = MongoClient()
+    db = client.tweep
+    twitter_race = db.tweeps
 
-# querying the db looking for any tweets that include the word korea
-# maybe should build a bunch or different queries...?
-results = db.tweeps.find({"tweet": {"$regex": ".*Korea.*" } }).count()
-print(results)
+    score1 = twitter_race.find({"tweet": {"$regex": ".*%s.*" % contestant1 } }).count()
+    score2 = twitter_race.find({"tweet": {"$regex": ".*%s.*" % contestant2 } }).count()
+    if score1 > score2:
+        print("%s is winning! The is %d to %d" %(contestant1, score1, score2))
+    elif score2 > score1:
+        print("%s is winning! The is %d to %d" %(contestant2, score2, score1))
+    elif score1 == score2:
+        print("It's tied! the score is %d to %d" %(score1, score2))
+        
 
 # build a few queries and see what people are talking about?
 # add these to a graph or something to have the data tell a story?
