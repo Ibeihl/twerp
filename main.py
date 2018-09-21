@@ -55,7 +55,7 @@ def run_twitter_race(ckey, csecret, atoken, asecret):
     twitterStream = Stream(auth, listener())
 
     #add geobox location
-    twitterStream.filter(languages=["en"], locations=[-126,24,67,49])
+    twitterStream.filter(languages=["en"], locations=[-126,24,-67,49])
 
 run_twitter_race(ckey, csecret, atoken, asecret)
 
