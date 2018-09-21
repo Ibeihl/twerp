@@ -63,5 +63,3 @@ run_twitter_race(ckey, csecret, atoken, asecret)
 # the clear_score function, and run this code!!
 
 # clear_score()
-
-# twitterStream.filter(locations=[-124.625,41.875,-116.375,46.375], languages=["en"]) 
