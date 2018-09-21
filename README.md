@@ -26,6 +26,10 @@ To end the game and stop the live stream, simply enter ^c
 
 To restart the game, run the clear_score function in the script by uncommenting it, and commenting the run_twitter_race function to reset.  Then, comment out the clear_score function and uncomment the run_twitter_race function and run the code again!
 
+### Screen Shot
+![screen shot 2018-09-21 at 11 22 27 am](https://user-images.githubusercontent.com/38081935/45899072-b6865f80-bd90-11e8-9f52-215a62bd5625.png)
+
+
 ### Target Audience
 Anyone interested in using live twitter data and comparing popular or trending topics.  
 
